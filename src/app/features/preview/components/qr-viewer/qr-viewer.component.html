@@ -1,0 +1,31 @@
+<div class="flex flex-col items-center gap-4">
+
+  <!-- QR frame -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <div #qrBox></div>
+    @if (error) {
+      <div class="w-[230px] h-[230px] flex items-center justify-center text-center text-xs text-rose-500 px-4">
+        QR payload too large. Shorten your form fields and try again.
+      </div>
+    }
+  </div>
+
+  <!-- Meta -->
+  @if (rendered) {
+    <div class="text-center space-y-0.5">
+      <p class="text-xs text-slate-400 font-mono">Scan to read submitted data</p>
+      <p class="text-[11px] text-slate-300 font-mono">{{ charCount }} characters encoded</p>
+    </div>
+
+    <!-- Download -->
+    <button (click)="download()"
+      class="w-full py-2.5 rounded-xl bg-brand text-white text-sm font-medium
+             hover:bg-brand-muted transition-colors flex items-center justify-center gap-2">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M6.5 1v8M3 6.5l3.5 3.5 3.5-3.5M1 11.5h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Download QR Code
+    </button>
+  }
+
+</div>

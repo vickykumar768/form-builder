@@ -1,0 +1,94 @@
+<!-- Backdrop -->
+<div
+  class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 animate-fade-in"
+  (click)="onOverlay($event)"
+>
+  <!-- Sheet -->
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] flex flex-col animate-scale-in">
+
+    <!-- Modal header -->
+    <div class="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-display text-xl font-light text-slate-800 truncate pr-4">{{ formTitle() }}</h2>
+        <button (click)="close()"
+          class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors shrink-0">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M1 1l11 11M12 1L1 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-1 p-1 bg-slate-100 rounded-xl">
+        <button
+          (click)="setTab('form')"
+          class="flex-1 py-1.5 text-sm rounded-lg font-medium transition-all"
+          [class.bg-white]="tab() === 'form'"
+          [class.text-slate-800]="tab() === 'form'"
+          [class.shadow-sm]="tab() === 'form'"
+          [class.text-slate-500]="tab() !== 'form'"
+        >
+          Fill Form
+        </button>
+        <button
+          (click)="setTab('qr')"
+          class="flex-1 py-1.5 text-sm rounded-lg font-medium transition-all"
+          [class.bg-white]="tab() === 'qr'"
+          [class.text-slate-800]="tab() === 'qr'"
+          [class.shadow-sm]="tab() === 'qr'"
+          [class.text-slate-500]="tab() !== 'qr'"
+        >
+          QR Code
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab body -->
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- Fill Form tab -->
+      @if (tab() === 'form') {
+        <fc-form-renderer (submitted)="onSubmitted()" />
+      }
+
+      <!-- QR tab -->
+      @if (tab() === 'qr') {
+        @if (submission()) {
+          <div class="space-y-4">
+            <fc-qr-viewer [submission]="submission()" />
+            <fc-submission-summary [submission]="submission()" />
+            <button (click)="onFillAgain()"
+              class="w-full py-2.5 rounded-xl border border-slate-200 text-sm font-medium
+                     text-slate-600 hover:bg-slate-50 transition-colors">
+              ← Fill Again
+            </button>
+          </div>
+        } @else {
+          <!-- Not submitted yet -->
+          <div class="flex flex-col items-center justify-center py-16 text-slate-300">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <rect x="6"  y="6"  width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="34" y="6"  width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="6"  y="34" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="12" y="12" width="8"  height="8"  rx="1" fill="currentColor" opacity=".45"/>
+              <rect x="40" y="12" width="8"  height="8"  rx="1" fill="currentColor" opacity=".45"/>
+              <rect x="12" y="40" width="8"  height="8"  rx="1" fill="currentColor" opacity=".45"/>
+              <rect x="34" y="34" width="7"  height="7"  rx="1" fill="currentColor" opacity=".3"/>
+              <rect x="43" y="34" width="7"  height="7"  rx="1" fill="currentColor" opacity=".3"/>
+              <rect x="43" y="43" width="7"  height="7"  rx="1" fill="currentColor" opacity=".3"/>
+              <rect x="34" y="43" width="7"  height="7"  rx="1" fill="currentColor" opacity=".3"/>
+            </svg>
+            <p class="mt-5 text-sm font-medium text-slate-400">No submission yet</p>
+            <p class="text-xs mt-1">Fill and submit the form to generate a QR code</p>
+            <button (click)="setTab('form')"
+              class="mt-5 px-5 py-2 text-sm rounded-xl bg-brand-accent text-white
+                     hover:bg-brand-accent-h transition-colors font-medium">
+              Go to Form →
+            </button>
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-4">
+  <input
+    type="text" [ngModel]="title" (ngModelChange)="patch('title',$event)"
+    placeholder="Form title…"
+    class="font-display text-2xl font-light w-full outline-none text-slate-800
+           border-b border-transparent focus:border-slate-300 pb-1 transition-colors"
+  />
+  <input
+    type="text" [ngModel]="description" (ngModelChange)="patch('description',$event)"
+    placeholder="Short description (optional)…"
+    class="text-sm text-slate-400 w-full outline-none mt-2
+           border-b border-transparent focus:border-slate-200 pb-0.5 transition-colors"
+  />
+  <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+    <p class="text-xs text-slate-500 font-medium">Submit button label</p>
+    <input
+      type="text" [ngModel]="submitLabel" (ngModelChange)="patch('submitLabel',$event)"
+      class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 outline-none
+             focus:border-indigo-400 w-40 text-center transition-colors"
+    />
+  </div>
+</div>

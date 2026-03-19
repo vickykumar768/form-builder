@@ -1,0 +1,145 @@
+<div
+  class="group animate-slide-up bg-white rounded-xl border-2 p-4 transition-all duration-150 cursor-pointer select-none"
+  [class.border-indigo-400]="selected"
+  [class.ring-2]="selected"
+  [class.ring-indigo-200]="selected"
+  [class.shadow-sm]="!selected"
+  [class.border-slate-200]="!selected"
+  [class.hover:border-slate-300]="!selected"
+  (click)="onCardClick($event)"
+  (dragstart)="onDragStart($event)"
+  (dragover)="onDragOver($event)"
+  (drop)="onDrop($event)"
+>
+  <div class="flex items-start gap-3">
+
+    <!-- Drag handle -->
+    <div class="mt-0.5 text-slate-200 hover:text-slate-400 transition-colors shrink-0 cursor-grab pt-0.5">
+      <svg width="9" height="16" viewBox="0 0 9 16" fill="currentColor">
+        <circle cx="2" cy="2"  r="1.5"/><circle cx="7" cy="2"  r="1.5"/>
+        <circle cx="2" cy="8"  r="1.5"/><circle cx="7" cy="8"  r="1.5"/>
+        <circle cx="2" cy="14" r="1.5"/><circle cx="7" cy="14" r="1.5"/>
+      </svg>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+
+      @if (field.type === 'heading') {
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-display text-lg text-slate-700">{{ field.label || 'Heading' }}</span>
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+      }
+
+      @else if (field.type === 'divider') {
+        <div class="flex items-center gap-2">
+          <hr class="flex-1 border-slate-300"/>
+          <span class="text-xs text-slate-400">divider</span>
+          <hr class="flex-1 border-slate-300"/>
+        </div>
+      }
+
+      @else if (field.type === 'paragraph') {
+        <div class="flex items-center gap-2 mb-1">
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+        <p class="text-sm text-slate-500 truncate">{{ $any(field).text || 'Paragraph text…' }}</p>
+      }
+
+      @else if (field.type === 'radio' || field.type === 'checkbox') {
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <label class="text-sm font-medium text-slate-700">
+            {{ field.label }}
+            @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
+          </label>
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+        <div class="space-y-1.5">
+          @for (opt of optionPreview; track opt) {
+            <label class="flex items-center gap-2 text-xs text-slate-500">
+              <input [type]="field.type === 'radio' ? 'radio' : 'checkbox'" disabled class="accent-indigo-500 shrink-0"/>
+              {{ opt }}
+            </label>
+          }
+          @if (extraCount > 0) {
+            <p class="text-xs text-slate-400">+{{ extraCount }} more…</p>
+          }
+        </div>
+      }
+
+      @else if (field.type === 'select') {
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <label class="text-sm font-medium text-slate-700">
+            {{ field.label }}
+            @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
+          </label>
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+        <select disabled class="pv-input bg-slate-50 text-sm pointer-events-none">
+          <option>Select…</option>
+          @for (opt of $any(field).options; track opt) { <option>{{ opt }}</option> }
+        </select>
+      }
+
+      @else if (field.type === 'textarea') {
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <label class="text-sm font-medium text-slate-700">
+            {{ field.label }}
+            @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
+          </label>
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+        <textarea disabled [placeholder]="$any(field).placeholder || ''" rows="2"
+          class="pv-input resize-none bg-slate-50 text-sm pointer-events-none"></textarea>
+      }
+
+      @else {
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <label class="text-sm font-medium text-slate-700">
+            {{ field.label }}
+            @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
+          </label>
+          <fc-ui-badge [text]="field.type" [color]="color" />
+        </div>
+        <input [type]="field.type" disabled [placeholder]="$any(field).placeholder || ''"
+          class="pv-input bg-slate-50 text-sm pointer-events-none"/>
+      }
+
+    </div>
+
+    <!-- Action buttons (hover reveal) -->
+    <div class="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+      @if (!isFirst) {
+        <button (click)="moveUp$.emit(index)" title="Move up"
+          class="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M5 8V2M2 5l3-3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      }
+      @if (!isLast) {
+        <button (click)="moveDown$.emit(index)" title="Move down"
+          class="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M5 2v6M2 5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      }
+      <button (click)="duplicate$.emit(field.id)" title="Duplicate"
+        class="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M1 8V2a1 1 0 011-1h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button (click)="remove$.emit(field.id)" title="Delete"
+        class="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-rose-50 text-slate-400 hover:text-rose-500 transition-colors">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1.5 3h9M4.5 3V2h3v1M3.5 3v7h5V3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>

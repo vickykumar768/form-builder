@@ -1,0 +1,32 @@
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col overflow-hidden shrink-0">
+
+  <div class="px-4 pt-4 pb-3 border-b border-slate-100">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Field Types</p>
+    <p class="text-xs text-slate-400 mt-0.5">Drag or click to add</p>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+    @for (group of groups; track group.key) {
+      <p class="text-[9px] font-bold uppercase tracking-widest text-slate-300 px-1 pt-3 pb-1.5 first:pt-1">
+        {{ group.label }}
+      </p>
+      @for (item of group.items; track item.type) {
+        <div
+          draggable="true"
+          (dragstart)="onDragStart($event, item.type)"
+          (click)="onClick(item.type)"
+          class="flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl cursor-grab
+                 border border-transparent hover:border-slate-200 hover:bg-slate-50
+                 active:scale-[0.97] transition-all duration-100 group"
+        >
+          <fc-ui-icon [type]="item.type" [color]="item.color" [size]="30" />
+          <div class="min-w-0">
+            <p class="text-[13px] font-medium text-slate-700 leading-none">{{ item.label }}</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">{{ item.description }}</p>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+</aside>

@@ -1,0 +1,63 @@
+<div
+  class="flex-1 overflow-y-auto bg-slate-50 p-5"
+  (dragover)="onZoneDragOver($event)"
+  (dragleave)="onZoneDragLeave($event)"
+  (drop)="onZoneDrop($event)"
+>
+  <div class="max-w-2xl mx-auto">
+
+    <!-- Form title / desc / submit label -->
+    <fc-form-meta />
+
+    <!-- Drop zone -->
+    <div
+      class="rounded-2xl border-2 border-dashed transition-all duration-200 min-h-[280px] p-3 space-y-2.5"
+      [class.border-indigo-400]="dragOver()"
+      [class.bg-indigo-50]="dragOver()"
+      [class.border-slate-200]="!dragOver()"
+    >
+
+      <!-- Empty state -->
+      @if (fields().length === 0) {
+        <div class="flex flex-col items-center justify-center h-56 text-slate-300">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+            <rect x="8" y="12" width="36" height="6" rx="3" fill="currentColor" opacity=".25"/>
+            <rect x="8" y="24" width="36" height="6" rx="3" fill="currentColor" opacity=".18"/>
+            <rect x="8" y="36" width="22" height="6" rx="3" fill="currentColor" opacity=".12"/>
+            <circle cx="42" cy="42" r="7" stroke="currentColor" stroke-width="2" opacity=".4"/>
+            <path d="M42 39v3M42 45v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".4"/>
+          </svg>
+          <p class="mt-4 text-sm font-medium">Drag fields here or click from the left panel</p>
+          <p class="text-xs mt-1 opacity-70">Your form is empty — build anything</p>
+        </div>
+      }
+
+      <!-- Field cards -->
+      @for (field of fields(); track field.id; let i = $index) {
+        <div
+          class="fc-card-wrap"
+          (dragend)="onDragEnd()"
+          [class.is-dragging]="isDragging(i)"
+          [class.drop-above]="isAbove(i)"
+          [class.drop-below]="isBelow(i)"
+        >
+          <fc-field-card
+            [field]="field"
+            [index]="i"
+            [total]="fields().length"
+            [selected]="selectedId() === field.id"
+            (selected$)="select($event)"
+            (remove$)="remove($event)"
+            (duplicate$)="dup($event)"
+            (moveUp$)="up($event)"
+            (moveDown$)="down($event)"
+            (dragStart$)="onCardDragStart($event)"
+            (dragOver$)="onCardDragOver($event)"
+            (drop$)="onCardDrop($event)"
+          />
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
