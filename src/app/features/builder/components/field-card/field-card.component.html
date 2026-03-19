@@ -28,7 +28,7 @@
       @if (field.type === 'heading') {
         <div class="flex items-center gap-2 flex-wrap">
           <span class="font-display text-lg text-slate-700">{{ field.label || 'Heading' }}</span>
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
       }
 
@@ -42,7 +42,7 @@
 
       @else if (field.type === 'paragraph') {
         <div class="flex items-center gap-2 mb-1">
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
         <p class="text-sm text-slate-500 truncate">{{ $any(field).text || 'Paragraph text…' }}</p>
       }
@@ -53,7 +53,7 @@
             {{ field.label }}
             @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
           </label>
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
         <div class="space-y-1.5">
           @for (opt of optionPreview; track opt) {
@@ -74,7 +74,7 @@
             {{ field.label }}
             @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
           </label>
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
         <select disabled class="pv-input bg-slate-50 text-sm pointer-events-none">
           <option>Select…</option>
@@ -88,7 +88,7 @@
             {{ field.label }}
             @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
           </label>
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
         <textarea disabled [placeholder]="$any(field).placeholder || ''" rows="2"
           class="pv-input resize-none bg-slate-50 text-sm pointer-events-none"></textarea>
@@ -100,7 +100,7 @@
             {{ field.label }}
             @if ($any(field).required) { <span class="text-rose-500 ml-0.5">*</span> }
           </label>
-          <fc-ui-badge [text]="field.type" [color]="color" />
+          <fc-ui-badge [text]="field.type" [color]="$any(color)" />
         </div>
         <input [type]="field.type" disabled [placeholder]="$any(field).placeholder || ''"
           class="pv-input bg-slate-50 text-sm pointer-events-none"/>

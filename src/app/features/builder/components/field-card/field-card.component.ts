@@ -5,6 +5,8 @@ import { FormBuilderService } from '@core/services';
 import { UiIconComponent }    from '@shared/components/ui-icon';
 import { UiBadgeComponent }   from '@shared/components/ui-badge';
 
+const FIELD_COLOR_MAP: Record<string, string> = {};
+
 @Component({
   selector:    'fc-field-card',
   standalone:  true,
@@ -27,9 +29,7 @@ export class FieldCardComponent {
   @Output() dragOver$    = new EventEmitter<{ event: DragEvent; index: number }>();
   @Output() drop$        = new EventEmitter<{ event: DragEvent; index: number }>();
 
-  private builder = inject(FormBuilderService);
-
-  get color()     { return (this.builder as any).FIELD_COLOR_MAP?.[this.field.type] ?? 'gray'; }
+  get color()     { return FIELD_COLOR_MAP[this.field.type] ?? 'gray'; }
   get isFirst()   { return this.index === 0; }
   get isLast()    { return this.index === this.total - 1; }
   get optionPreview(): string[] { return ((this.field as any).options ?? []).slice(0, 3); }

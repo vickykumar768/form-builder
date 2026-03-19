@@ -4,28 +4,56 @@
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
     <div #qrBox></div>
     @if (error) {
-      <div class="w-[230px] h-[230px] flex items-center justify-center text-center text-xs text-rose-500 px-4">
-        QR payload too large. Shorten your form fields and try again.
+      <div class="w-[230px] h-[230px] flex items-center justify-center text-center text-xs text-rose-500 px-6 leading-relaxed">
+        QR payload too large.<br>Shorten your form fields and try again.
       </div>
     }
   </div>
 
-  <!-- Meta -->
+  <!-- Scan hint -->
   @if (rendered) {
-    <div class="text-center space-y-0.5">
-      <p class="text-xs text-slate-400 font-mono">Scan to read submitted data</p>
-      <p class="text-[11px] text-slate-300 font-mono">{{ charCount }} characters encoded</p>
+    <div class="text-center space-y-1">
+      <p class="text-xs font-medium text-slate-500">
+        📱 Scan with your phone camera
+      </p>
+      <p class="text-[11px] text-slate-400">Opens a formatted view of all submitted data</p>
     </div>
 
-    <!-- Download -->
-    <button (click)="download()"
-      class="w-full py-2.5 rounded-xl bg-brand text-white text-sm font-medium
-             hover:bg-brand-muted transition-colors flex items-center justify-center gap-2">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <path d="M6.5 1v8M3 6.5l3.5 3.5 3.5-3.5M1 11.5h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- URL preview (truncated) -->
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 flex items-center gap-2">
+      <svg class="shrink-0 text-indigo-400" width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M1 6.5h11M6.5 1c-2 2-2 9 0 11M6.5 1c2 2 2 9 0 11" stroke="currentColor" stroke-width="1.2"/>
       </svg>
-      Download QR Code
-    </button>
+      <span class="text-[10px] font-mono text-slate-400 truncate flex-1">{{ viewerUrl }}</span>
+      <button (click)="openViewer()" title="Open in browser"
+        class="shrink-0 text-indigo-500 hover:text-indigo-700 transition-colors">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M5 2H2a1 1 0 00-1 1v7a1 1 0 001 1h7a1 1 0 001-1V7M8 1h3v3M11 1L5.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div class="w-full grid grid-cols-2 gap-2">
+      <button (click)="openViewer()"
+        class="py-2.5 rounded-xl border border-slate-200 text-sm font-medium
+               text-slate-600 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M1 6.5s2.5-5 5.5-5 5.5 5 5.5 5-2.5 5-5.5 5-5.5-5-5.5-5z" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="6.5" cy="6.5" r="2" fill="currentColor"/>
+        </svg>
+        View Data
+      </button>
+      <button (click)="download()"
+        class="py-2.5 rounded-xl bg-brand text-white text-sm font-medium
+               hover:bg-brand-muted transition-colors flex items-center justify-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M6.5 1v8M3 6.5l3.5 3.5 3.5-3.5M1 11.5h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Download
+      </button>
+    </div>
   }
 
 </div>

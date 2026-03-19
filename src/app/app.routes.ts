@@ -8,5 +8,12 @@ export const routes: Routes = [
         .then(m => m.BuilderPageComponent),
     title: 'FormCraft — Form Builder',
   },
+  {
+    path: 'view/:data',
+    loadComponent: () =>
+      import('./features/form-view/form-view.component')
+        .then(m => m.FormViewComponent),
+    title: 'FormCraft — Submission',
+  },
   { path: '**', redirectTo: '' },
 ];

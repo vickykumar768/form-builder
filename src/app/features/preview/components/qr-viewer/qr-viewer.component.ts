@@ -2,8 +2,8 @@ import {
   Component, Input, OnChanges, SimpleChanges,
   ViewChild, ElementRef, AfterViewInit, inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { QrService }    from '@core/services';
+import { CommonModule }   from '@angular/common';
+import { QrService }      from '@core/services';
 import { FormSubmission } from '@core/models';
 
 @Component({
@@ -19,25 +19,31 @@ export class QrViewerComponent implements OnChanges, AfterViewInit {
   qrBox!: ElementRef<HTMLDivElement>;
 
   private qrSvc = inject(QrService);
-  rendered  = false;
-  error     = false;
-  charCount = 0;
 
-  ngAfterViewInit() { if (this.submission) this.render(); }
+  rendered   = false;
+  error      = false;
+  viewerUrl  = '';
 
-  ngOnChanges(c: SimpleChanges) {
-    if (c['submission'] && this.submission && this.qrBox?.nativeElement) this.render();
+  ngAfterViewInit(): void {
+    if (this.submission) this.doRender();
   }
 
-  private render() {
-    const payload     = this.qrSvc.buildPayload(this.submission!);
-    this.charCount    = payload.length;
-    const ok          = this.qrSvc.render(this.qrBox.nativeElement, payload, 230);
-    this.rendered     = ok;
-    this.error        = !ok;
+  ngOnChanges(c: SimpleChanges): void {
+    if (c['submission'] && this.submission && this.qrBox?.nativeElement) this.doRender();
   }
 
-  download() {
+  private doRender(): void {
+    this.viewerUrl = this.qrSvc.buildViewerUrl(this.submission!);
+    const ok       = this.qrSvc.render(this.qrBox.nativeElement, this.submission!);
+    this.rendered  = ok;
+    this.error     = !ok;
+  }
+
+  openViewer(): void {
+    if (this.viewerUrl) window.open(this.viewerUrl, '_blank');
+  }
+
+  download(): void {
     if (!this.qrBox) return;
     const name = (this.submission?.formTitle ?? 'form')
       .toLowerCase().replace(/\s+/g, '-') + '-qr.png';
